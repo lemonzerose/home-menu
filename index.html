@@ -3,47 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>家用餐桌點餐</title>
+    <title>今天想吃什麼呢</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; background: #fff; overflow: hidden; }
-        .sidebar { width: 100px; background: #f7f7f7; border-right: 1px solid #eee; flex-shrink: 0; }
-        .tab { padding: 25px 10px; font-size: 14px; text-align: center; color: #888; cursor: pointer; border-bottom: 1px solid #eee; }
-        .tab.active { background: white; color: #ff6b6b; font-weight: bold; border-left: 4px solid #ff6b6b; }
-        .main { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
-        /* 預設讓所有 item 隱藏，由 JS 控制顯示 */
-        .item { display: none; background: #fff; border: 1.5px solid #eee; border-radius: 12px; padding: 20px; margin-bottom: 15px; cursor: pointer; }
-        .item.selected { border: 2.5px solid #ff6b6b; background: #fff9f9; }
-        .item-name { font-weight: bold; font-size: 18px; color: #333; }
-        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #eee; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
-        .btn { background: #ff6b6b; color: white; border: none; padding: 12px 35px; border-radius: 25px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: 'Noto Sans TC', sans-serif; 
+            margin: 0; display: flex; flex-direction: column; height: 100vh; 
+            background: #fdfdfd; overflow: hidden; letter-spacing: 0.2px;
+        }
+        .sidebar { width: 100%; background: #fff; border-bottom: 1px solid #eee; display: flex; overflow-x: auto; white-space: nowrap; flex-shrink: 0; }
+        .tab { padding: 18px 25px; font-size: 15px; color: #aaa; cursor: pointer; display: inline-block; transition: 0.3s; }
+        .tab.active { color: #ff6b6b; font-weight: bold; border-bottom: 4px solid #ff6b6b; }
+        .main { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 120px; }
+        .item { 
+            display: none; background: #fff; border: 1.5px solid #f0f0f0; border-radius: 24px; 
+            padding: 22px; margin-bottom: 18px; cursor: pointer; position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: transform 0.1s;
+        }
+        .item:active { transform: scale(0.98); }
+        .item.selected { border: 2.5px solid #ff6b6b; background: #fffafa; box-shadow: 0 4px 12px rgba(255,107,107,0.1); }
+        .item-name { font-weight: bold; font-size: 19px; color: #333; margin-bottom: 8px; }
+        .item-info { font-size: 12px; color: #888; margin-bottom: 6px; line-height: 1.4; }
+        .item-meta { font-size: 11px; color: #bbb; display: flex; align-items: center; }
+        .recipe-trigger {
+            position: absolute; right: 15px; top: 18px;
+            background: #f8f8f8; color: #aaa; padding: 6px 14px;
+            border-radius: 50px; font-size: 11px; font-weight: bold;
+        }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; padding: 25px; }
+        .modal-content { background: white; width: 100%; max-width: 420px; border-radius: 30px; padding: 30px; position: relative; max-height: 85vh; overflow-y: auto; }
+        .modal-title { font-size: 20px; font-weight: bold; margin-bottom: 18px; color: #ff6b6b; }
+        .modal-body { line-height: 1.8; color: #444; white-space: pre-wrap; font-size: 15px; }
+        .close-btn { margin-top: 25px; width: 100%; padding: 14px; background: #f5f5f5; color: #666; border: none; border-radius: 18px; font-weight: bold; cursor: pointer; }
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #eee; padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
+        #status { font-weight: bold; color: #555; font-size: 15px; }
+        .btn { background: #ff6b6b; color: white; border: none; padding: 14px 35px; border-radius: 50px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 10px rgba(255,107,107,0.3); }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
         <div class="tab active" onclick="switchTab(this, 'staple')">主食</div>
-        <div class="tab" onclick="switchTab(this, 'chicken')">雞肉料理</div>
         <div class="tab" onclick="switchTab(this, 'pork')">豬肉料理</div>
+        <div class="tab" onclick="switchTab(this, 'chicken')">雞肉料理</div>
         <div class="tab" onclick="switchTab(this, 'soup')">暖暖的湯</div>
-        <div class="tab" onclick="switchTab(this, 'other')">其他</div>
     </div>
 
     <div class="main">
+        <div class="item chicken" onclick="toggle(this, '杏鮑菇雞肉起司捲')">
+            <div class="recipe-trigger" onclick="openRecipe(event, '杏鮑菇雞肉起司捲', '1. 杏鮑菇切頭尾\n2. 削皮刀削出對稱兩片\n3. 一塊雞胸肉加胡椒(比想像多一點)使用絞碎機絞碎\n4. 切掉的頭尾切丁加入絞肉中\n5. 絞肉加到杏鮑菇上後捲起\n6. 加油煎到顏色有微焦(最後可加水加速)<br><br><a href=\'https://www.instagram.com/reel/DHoA-p8zVQ6/?igsh=MWNuaWE4ZnhoeXQ2OA==\' target=\'_blank\' style=\'color:#ff6b6b; font-weight:bold; text-decoration:none;\'>🔗 查看詳細食譜影片</a>')">👨‍🍳 食譜</div>
+            <div class="item-name">杏鮑菇雞肉起司捲</div>
+            <div class="item-info">食材：杏鮑菇、雞肉、起司、白胡椒</div>
+            <div class="item-meta"><span>⏱ 30分鐘</span></div>
+        </div>
+
         <div class="item staple" onclick="toggle(this, '白飯')">
             <div class="item-name">白飯</div>
-        </div>
-        
-        <div class="item pork" onclick="toggle(this, '紅燒肉')">
-            <div class="item-name">紅燒肉</div>
+            <div class="item-meta"><span>⏱ 1小時</span></div>      
         </div>
 
-        <div class="item soup" onclick="toggle(this, '番茄豆腐湯')">
-            <div class="item-name">番茄豆腐湯</div>
+        <div class="item soup" onclick="toggle(this, '剝皮辣椒雞湯')">
+            <div class="recipe-trigger" onclick="openRecipe(event, '剝皮辣椒雞湯', '1. 蒜末+薑(4片太多)+雞肉炒到恰恰\n2. 加菇類繼續翻炒\n3. 加水加醬油煮20分鐘(直接倒感覺差不多一大匙)\n4. 加入高麗菜跟4片剝皮辣椒跟剝皮辣椒汁再煮10分鐘<br><br><a href=\'https://www.instagram.com/reel/DD9NGsrRa4N/?igsh=aGl3a3dkazhwcWZh\' target=\'_blank\' style=\'color:#ff6b6b; font-weight:bold; text-decoration:none;\'>🔗 查看詳細食譜影片</a>')">👨‍🍳 食譜</div>
+            <div class="item-name">剝皮辣椒雞湯</div>
+            <div class="item-info">食材：蒜頭、薑、菇類、雞肉、醬油、剝皮辣椒</div>
+            <div class="item-meta"><span>⏱ 40分鐘</span></div>
         </div>
+    </div>
 
-        <div class="item chicken" onclick="toggle(this, '蔥油雞')">
-            <div class="item-name">蔥油雞</div>
+    <div id="recipeModal" class="modal" onclick="closeRecipe()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div id="modalTitle" class="modal-title"></div>
+            <div id="modalBody" class="modal-body"></div>
+            <button class="close-btn" onclick="closeRecipe()">關閉內容</button>
         </div>
     </div>
 
@@ -59,43 +92,41 @@
     <script>
         let selected = new Set();
 
-        // 1. 切換分類的功能
+        function openRecipe(event, title, steps) {
+            event.stopPropagation();
+            document.getElementById('modalTitle').innerText = title;
+            // 重要：這裡改成 innerHTML 才能解析 <a> 標籤
+            document.getElementById('modalBody').innerHTML = steps;
+            document.getElementById('recipeModal').style.display = 'flex';
+        }
+
+        function closeRecipe() {
+            document.getElementById('recipeModal').style.display = 'none';
+        }
+
         function switchTab(el, category) {
-            // 切換左側按鈕顏色
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
-
-            // 根據 class 顯示或隱藏菜色
-            const items = document.querySelectorAll('.item');
-            items.forEach(item => {
-                if (item.classList.contains(category)) {
-                    item.style.display = 'block'; // 符合分類就顯示
-                } else {
-                    item.style.display = 'none';  // 不符合就藏起來
-                }
+            document.querySelectorAll('.item').forEach(item => {
+                item.style.display = item.classList.contains(category) ? 'block' : 'none';
             });
         }
 
-        // 2. 點選菜色功能
         function toggle(el, name) {
             el.classList.toggle('selected');
             selected.has(name) ? selected.delete(name) : selected.add(name);
             document.getElementById('status').innerText = selected.size > 0 ? `已選 ${selected.size} 道` : '尚未選餐';
         }
 
-        // 3. 送出功能
         function send() {
             if (selected.size === 0) return alert('請先選菜！');
-            const resultText = Array.from(selected).join('、');
-            document.getElementById('food-data').value = resultText;
-            alert('即將送出：' + resultText);
+            document.getElementById('food-data').value = Array.from(selected).join('、');
+            alert('即將送出點餐清單！');
             document.getElementById('real-form').submit();
         }
 
-        // 4. 初始化：進入網頁時預設顯示「主食」
         document.addEventListener("DOMContentLoaded", function() {
-            const firstTab = document.querySelector('.tab');
-            switchTab(firstTab, 'staple');
+            switchTab(document.querySelector('.tab'), 'staple');
         });
     </script>
 </body>
