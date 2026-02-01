@@ -48,6 +48,7 @@
         <div class="tab active" onclick="switchTab(this, 'staple')">主食</div>
         <div class="tab" onclick="switchTab(this, 'pork')">豬肉料理</div>
         <div class="tab" onclick="switchTab(this, 'chicken')">雞肉料理</div>
+        <div class="tab" onclick="switchTab(this, 'veg')">家常蔬菜</div>
         <div class="tab" onclick="switchTab(this, 'soup')">暖暖的湯</div>
     </div>
 
@@ -69,6 +70,41 @@
             <div class="item-name">剝皮辣椒雞湯</div>
             <div class="item-info">食材：蒜頭、薑、菇類、雞肉、醬油、剝皮辣椒、高麗菜</div>
             <div class="item-meta"><span>⏱ 40分鐘</span></div>
+        </div>
+
+        <div class="item staple" onclick="toggle(this, '番茄蛋麵(乾/湯)')">
+            <div class="recipe-trigger" onclick="openRecipe(event, '番茄蛋麵(乾/湯)', '1. 切蒜末+剪番茄*2進湯鍋小火煮爛\n2. 加水加高麗菜\n3. 調料:倒入鹽、白胡椒、醬油、番茄醬\n4. 滾時直接放麵條(不分開煮)\n5. 平底鍋加油炒蛋\n6. 炒好的蛋直接放入鍋中\注意不要加芝麻香油! </div>
+            <div class="item-name">番茄蛋麵(乾/湯)</div>
+            <div class="item-info">食材：蒜、番茄、高麗菜、蛋、麵條、油、鹽、白胡椒、醬油、番茄醬</div>
+            <div class="item-meta"><span>⏱ 10分鐘</span></div>
+        </div>
+
+         <div class="item staple" onclick="toggle(this, '奶油雞炊飯')">
+            <div class="recipe-trigger" onclick="openRecipe(event, '奶油雞炊飯', '1. 醬油+鹽醃雞腿肉\n2. 加油煎雞腿肉到兩邊恰恰\n3. 一碗米加醬油1匙(下次可試兩匙)、胡椒、奶油、起司、高麗菜、玉米筍、蒜頭、剛剛煎好的雞腿肉<br><br><a href=\'https://www.instagram.com/reel/C_8J4o0vck8/?igsh=MXNidTRtY3Fyb3YyZA==\' target=\'_blank\' style=\'color:#ff6b6b; font-weight:bold; text-decoration:none;\'>🔗 查看詳細食譜影片</a>')">👨‍🍳 食譜</div>
+            <div class="item-name">奶油雞炊飯</div>
+            <div class="item-info">食材：雞腿肉、奶油、起司、蒜、高麗菜、玉米筍、米、油、鹽、白胡椒、醬油</div>
+            <div class="item-meta"><span>⏱ 40分鐘</span></div>
+        </div>
+
+        <div class="item veg" onclick="toggle(this, '炒高麗菜')">
+            <div class="recipe-trigger" onclick="openRecipe(event, '炒高麗菜', '1. 菜+油+鹽等3分鐘軟化\n2. +油+蒜末+水煮滾(水油炒法)\n3. 滾了加剛剛軟化的高麗菜炒一下悶1分半<br><br><a href=\'https://www.instagram.com/reel/DHs7f52pfb1/?igsh=MWhsaDQ5a2ZwMnpmeA==\' target=\'_blank\' style=\'color:#ff6b6b; font-weight:bold; text-decoration:none;\'>🔗 查看詳細食譜影片</a>')">👨‍🍳 食譜</div>
+            <div class="item-name">炒高麗菜</div>
+            <div class="item-info">食材：蒜、高麗菜、油、鹽、</div>
+            <div class="item-meta"><span>⏱ 5分鐘</span></div>
+        </div>
+        
+        <div class="item chicken" onclick="toggle(this, '杏鮑菇雞肉起司捲')">
+            <div class="recipe-trigger" onclick="openRecipe(event, '杏鮑菇雞肉起司捲', '1. 杏鮑菇切頭尾\n2. 削皮刀削出對稱兩片\n3. 一塊雞胸肉加胡椒(比想像多一點)使用絞碎機絞碎\n4. 切掉的頭尾切丁加入絞肉中\n5. 絞肉加到杏鮑菇上後捲起\n6. 加油煎到顏色有微焦(最後可加水加速)<br><br><a href=\'https://www.instagram.com/reel/DHoA-p8zVQ6/?igsh=MWNuaWE4ZnhoeXQ2OA==\' target=\'_blank\' style=\'color:#ff6b6b; font-weight:bold; text-decoration:none;\'>🔗 查看詳細食譜影片</a>')">👨‍🍳 食譜</div>
+            <div class="item-name">杏鮑菇雞肉起司捲</div>
+            <div class="item-info">食材：杏鮑菇、雞肉、起司、白胡椒</div>
+            <div class="item-meta"><span>⏱ 30分鐘</span></div>
+        </div>
+
+        <div class="item chicken" onclick="toggle(this, '煎雞胸肉')">
+            <div class="recipe-trigger" onclick="openRecipe(event, '煎雞胸肉', '1. 用刀背斷筋\n3. 用餐巾紙把水粉擦乾\n4. 加入油下去煎到兩面金黃\n5. 關火靜置等五分鐘<br><br><a href=\'https://www.instagram.com/reel/DIbRv7vysXm/?igsh=MWhjZDQ3dWxueWg3dw==\' target=\'_blank\' style=\'color:#ff6b6b; font-weight:bold; text-decoration:none;\'>🔗 查看詳細食譜影片</a>')">👨‍🍳 食譜</div>
+            <div class="item-name">煎雞胸肉</div>
+            <div class="item-info">食材：雞胸肉、油</div>
+            <div class="item-meta"><span>⏱ 5分鐘</span></div>
         </div>
     </div>
 
@@ -131,4 +167,5 @@
     </script>
 </body>
 </html>
+
 
